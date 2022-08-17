@@ -1,7 +1,9 @@
 package io.lcalmsky.demo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.NoSuchElementException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,10 +39,10 @@ class AccountRepositoryTest {
   }
 
   @Test
-  @DisplayName("암호화 컬럼을 cipher로 조회시 정상 동작")
+  @DisplayName("암호화 컬럼을 cipher로 조회시 실패")
   void test2() {
     String encryptedPhoneNumber = aes256Utils.encrypt(PHONE_NUMBER);
-    Account account = userRepository.findByPhoneNumber(encryptedPhoneNumber).orElseThrow();
-    assertEquals(NAME, account.getName());
+    assertThrows(NoSuchElementException.class,
+        () -> userRepository.findByPhoneNumber(encryptedPhoneNumber).orElseThrow());
   }
 }
